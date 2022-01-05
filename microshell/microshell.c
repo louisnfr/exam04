@@ -1,5 +1,5 @@
-#include <unistd.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 
 #define SIDE_OUT	0
@@ -15,12 +15,12 @@
 
 typedef struct s_list
 {
-	char			**args;
-	int				length;
-	int				type;
-	int				pipes[2];
-	struct s_list	*previous;
-	struct s_list	*next;
+	char 	**args;
+	int		length;
+	int		type;
+	int		pipes[2];
+	struct s_list *previous;
+	struct s_list *next;
 }	t_list;
 
 int	ft_strlen(char *str)
@@ -50,14 +50,13 @@ int	exit_fatal(void)
 void	*exit_fatal_ptr(void)
 {
 	exit_fatal();
-	exit(EXIT_FAILURE);
 	return (NULL);
 }
 
-char	*ft_strdup(char *str)
+char *ft_strdup(char *str)
 {
-	char	*copy;
-	int		i;
+	char *copy;
+	int	i;
 
 	copy = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	if (!copy)
@@ -133,8 +132,9 @@ int	list_clear(t_list **cmds)
 		free((*cmds)->args);
 		free(*cmds);
 		*cmds = tmp;
+	
 	}
-	*cmds = NULL;
+	cmds = NULL;
 	return (EXIT_SUCCESS);
 }
 
@@ -147,7 +147,7 @@ int	parse_arg(t_list **cmds, char *arg)
 		return (EXIT_SUCCESS);
 	else if (!is_break && (!*cmds || (*cmds)->type > TYPE_END))
 		return (list_push(cmds, arg));
-	else if (strcmp("|", arg) == 0)
+	else if (!strcmp("|", arg))
 		(*cmds)->type = TYPE_PIPE;
 	else if (is_break)
 		(*cmds)->type = TYPE_BREAK;
@@ -230,7 +230,7 @@ int	exec_cmds(t_list **cmds, char **env)
 		else
 			ret = exec_cmd(crt, env);
 		if (!(*cmds)->next)
-			break;
+			break ;
 		*cmds = (*cmds)->next;
 	}
 	return (ret);
@@ -244,9 +244,9 @@ int	main(int ac, char **av, char **env)
 
 	cmds = NULL;
 	ret = EXIT_SUCCESS;
-	i = 1;
-	while (i < ac)
-		parse_arg(&cmds, av[i++]);
+	i = 0;
+	while (++i < ac)
+		parse_arg(&cmds, av[i]);
 	if (cmds)
 		ret = exec_cmds(&cmds, env);
 	list_clear(&cmds);
