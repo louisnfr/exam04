@@ -126,15 +126,15 @@ int	list_clear(t_list **cmds)
 	while (*cmds)
 	{
 		tmp = (*cmds)->next;
-		i = 0;
-		while (i < (*cmds)->length)
-			free((*cmds)->args[i++]);
+		i = -1;
+		while (++i < (*cmds)->length)
+			free((*cmds)->args[i]);
 		free((*cmds)->args);
 		free(*cmds);
 		*cmds = tmp;
 	
 	}
-	cmds = NULL;
+	*cmds = NULL;
 	return (EXIT_SUCCESS);
 }
 
